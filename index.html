@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            padding: 20px;
+            justify-content: center;
+        }
+        .gallery img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .gallery img:hover {
+            transform: scale(1.1);
+        }
+        .full-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .full-screen img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+            object-fit: contain;
+        }
+        .close, .delete {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: red;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .delete {
+            right: 80px;
+            background: black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Photo Gallery</h1>
+    <div class="gallery" id="gallery"></div>
+    <div class="full-screen" id="fullscreen">
+        <button class="close" onclick="closeFullscreen()">Close</button>
+        <button class="delete" onclick="deleteImage()">Delete</button>
+        <img id="fullscreen-img" src="">
+    </div>
+    <script>
+        let images = ['uploads/photo1.jpg', 'uploads/photo2.jpg']; // Replace with backend dynamic loading
+        let currentImage = "";
+
+        function loadGallery() {
+            const gallery = document.getElementById("gallery");
+            gallery.innerHTML = "";
+            images.forEach((img, index) => {
+                const imgElement = document.createElement("img");
+                imgElement.src = img;
+                imgElement.onclick = () => openFullscreen(img);
+                gallery.appendChild(imgElement);
+            });
+        }
+
+        function openFullscreen(img) {
+            document.getElementById("fullscreen-img").src = img;
+            document.getElementById("fullscreen").style.display = "flex";
+            currentImage = img;
+        }
+
+        function closeFullscreen() {
+            document.getElementById("fullscreen").style.display = "none";
+        }
+
+        function deleteImage() {
+            images = images.filter(img => img !== currentImage);
+            closeFullscreen();
+            loadGallery();
+        }
+
+        loadGallery();
+    </script>
+</body>
+</html>
